@@ -38,10 +38,10 @@
 sum(//máquina/hardware/memoria)
 
 14. A suma das capacidades dos discos duros de tipo "SCSI".
-j
+sum(//máquina/hardware/disco[@tecnoloxía='SCSI']/@capacidade)
 
 15. Os nomes das máquinas das que se coñeza a súa cantidade de memoria, pero non a tecno-loxía desta.
-
+//máquina[hardware/memoria and not(hardware/memoria/@tecnoloxía)]/@nome
 
 16. As máquinas con sistema operativo da familia Windows e gravadora de DVD.
 
