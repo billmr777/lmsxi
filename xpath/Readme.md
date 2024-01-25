@@ -1,4 +1,4 @@
-# Curso 23/24
+# Curso 23/24 | Ejercicios Xpath
 
 Ejercicios:
 1.-escenario de equipamento informático (básico)
