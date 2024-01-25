@@ -38,7 +38,7 @@
 sum(//máquina/hardware/memoria)
 
 14. A suma das capacidades dos discos duros de tipo "SCSI".
-
+j
 
 15. Os nomes das máquinas das que se coñeza a súa cantidade de memoria, pero non a tecno-loxía desta.
 
