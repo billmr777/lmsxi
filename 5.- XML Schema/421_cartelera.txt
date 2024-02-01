@@ -1,0 +1,83 @@
+Un cine utiliza un fichero XML para almacenar las películas que tiene en cartelera.
+
+Para cada película, se guarda la siguiente información:
+Código identificativo (atributo).
+Duración (atributo).
+Año de publicación (atributo).
+Título de la película.
+Título original, en el caso de la película sea extrangera.
+País se producción.
+Los géneros a los que pertenece.
+Clasificación de edad o si está sin clasificar.
+Sinopsis.
+Director o directora.
+Reparto (actores y actrices).
+Web.
+URL de IMDb.
+Nombre del fichero que contiene el cartel de la película.
+
+
+Escribe un XML Schema para validar el tipo de documento XML descrito, eligiendo los tipos de datos más apropiados y teniendo en cuenta que:
+1) En cada documento, hay una película o más.
+2) Los atributos codigo, duracion y ano son atributos obligatorios.
+3) El atributo codigo es un identificador único en todo el documento.
+4) Los elementos <titulo-original> y <web> son elementos opcionales. El resto son obligatorios.
+5) En la lista de géneros, por lo menos, tiene que haber uno.
+6) Si no se usa <clasificacion>, se debe utilizar <sin-clasificar />. Uno de ellos tiene que estar presente siempre, pero no pueden estarlo a la vez.
+7) En el caso de estar presente <clasificacion>, el atributo edad es obligatorio.
+8) El atributo edad es un valor numérico. Se utiliza 0 para indicar que es para todos los públicos.
+9) El elemento <director> puede substituirse por <directora>, pero solo puede aparecer una vez cada uno y no simultáneamente.
+10) El reparto está formado por actores y atrices. Como mínimo, debe haber un <actor> o <actriz>.
+11) Los valores de <imdb> y web son URLs. Se debe validar que empiecen por http:// o https://. Es necesario tener en cuenta que se puede escribir en mayúsculas, minúsculas o de forma combinada (mezclando minúsculas con mayúsculas).
+___________________________________________________________
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="cartelera">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="pelicula" type="peliculaType" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="peliculaType">
+    <xs:sequence>
+      <xs:element name="titulo" type="xs:string"/>
+      <xs:element name="titulo-original" type="xs:string" minOccurs="0"/>
+      <xs:element name="pais-produccion" type="xs:string"/>
+      <xs:element name="generos" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
+      <xs:element name="clasificacion" type="clasificacionType"/>
+      <xs:element name="sin-clasificar" type="xs:string" minOccurs="0"/>
+      <xs:element name="sinopsis" type="xs:string"/>
+      <xs:choice>
+        <xs:element name="director" type="xs:string"/>
+        <xs:element name="directora" type="xs:string"/>
+      </xs:choice>
+      <xs:element name="reparto" type="repartoType"/>
+      <xs:element name="web" type="urlType" minOccurs="0"/>
+      <xs:element name="imdb" type="urlType"/>
+      <xs:element name="cartel" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="codigo" type="xs:ID" use="required"/>
+    <xs:attribute name="duracion" type="xs:string" use="required"/>
+    <xs:attribute name="ano" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="clasificacionType">
+    <xs:attribute name="edad" type="xs:integer" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="repartoType">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="actor" type="xs:string"/>
+      <xs:element name="actriz" type="xs:string"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:simpleType name="urlType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="https?://.+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
