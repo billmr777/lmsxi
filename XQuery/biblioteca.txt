@@ -3,11 +3,21 @@ Escribe las consultas XQuery que permitan obtener la siguiente información:
 * Los datos de cada libro deben estar dentro de un elemento <libro>.
 * El título y la editorial de cada libro deben estar separados por un guión medio (-).
 
+for $libro in //libro
+return <libro>{concat($libro/titulo, ' - ', $libro/editorial)}</libro>
+
+_________________________________________________________________________
 
 2. El título de todos los libros de menos de 400 páginas.
 * Se debe obtener únicamente los datos, sin etiquetas.
 
-
+for 
+$libro in /biblioteca/libros/libro
+where
+$libro/paginas<400
+return 
+$libro/titulo/text()
+_____________________________________________________________________________
 3. La cantidad de libros de más de 400 páginas.
 
 
