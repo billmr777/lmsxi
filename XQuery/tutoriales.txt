@@ -46,10 +46,25 @@ ________________________________________________________________________________
 _______________________________________________________________________________________________________________________________
 8. la media de vistas de los tutoriales, dentro de una etiqueta <media>.
 
+<media>
+{
+  let $numTutoriales := count(doc("tutoriales.xml")//tutorial)
+  let $sumaVisitas := sum(doc("tutoriales.xml")//tutorial/visitas)
+  return
+    if ($numTutoriales ne 0)
+    then $sumaVisitas div $numTutoriales
+    else ()
+}
+</media>
 
 _______________________________________________________________________________________________________________________________
 9. cuantos tutoriales de XML hay, dentro de una etiqueta <totaltutoriales>.
 
+<totaltutoriales>
+{
+  count(doc("tutoriales.xml")//tutorial[categoria = 'XML'])
+}
+</totaltutoriales>
 
 _______________________________________________________________________________________________________________________________
 10. el nombre del tutorial y su categoría, ordenado por el nombre de cada categoría
