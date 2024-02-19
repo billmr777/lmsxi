@@ -1,9 +1,12 @@
 Escribe las consultas XQuery que permitan obtener la siguiente información:
+
 1. cada uno de los nombres de las categorias con la etiqueta "categoria".
+
 
 distinct-values(doc("tutoriales.xml")//categoria)
 _______________________________________________________________________________________________________________________________
 2. los titulos de los tutoriales con el número de visitas entre paréntesis, ambos dentro de la misma etiqueta "lostutoriales".
+
 
 <lostutoriales>
 {
@@ -17,21 +20,25 @@ ________________________________________________________________________________
 _______________________________________________________________________________________________________________________________
 3. los nombres de los tutoriales con menos de 2000 visitas
 
+
 for $tutorial in doc("tutoriales.xml")//tutorial
 where xs:integer($tutorial/visitas) < 2000
 return data($tutorial/titulo)
 _______________________________________________________________________________________________________________________________
 4. los nombres de los tutoriales de XML con más de 30.000 visitas
 
+
 for $tutorial in doc("tutoriales.xml")//tutorial[categoria = 'XML' and xs:integer(visitas) > 30000]
 return data($tutorial/titulo)
 _______________________________________________________________________________________________________________________________
 5. el número total de visitas
 
+
 let $totalVisitas := sum(doc("tutoriales.xml")//tutorial/visitas)
 return $totalVisitas
 _______________________________________________________________________________________________________________________________
 6. los nombres de las categorías distintas, cada una en una etiqueta <categoriadistintas>
+
 
 <categoriasdistintas>
 {
@@ -45,6 +52,7 @@ ________________________________________________________________________________
 
 _______________________________________________________________________________________________________________________________
 8. la media de vistas de los tutoriales, dentro de una etiqueta <media>.
+
 
 <media>
 {
@@ -60,6 +68,7 @@ ________________________________________________________________________________
 _______________________________________________________________________________________________________________________________
 9. cuantos tutoriales de XML hay, dentro de una etiqueta <totaltutoriales>.
 
+
 <totaltutoriales>
 {
   count(doc("tutoriales.xml")//tutorial[categoria = 'XML'])
@@ -70,12 +79,55 @@ ________________________________________________________________________________
 10. el nombre del tutorial y su categoría, ordenado por el nombre de cada categoría
 
 
+<tutoriales_ordenados>
+{
+  for $tutorial in doc("tutoriales.xml")//tutorial
+  let $categoria := $tutorial/categoria
+  order by $categoria, $tutorial/titulo
+  return
+    <tutorial>
+      <nombre>{data($tutorial/titulo)}</nombre>
+      <categoria>{data($categoria)}</categoria>
+    </tutorial>
+}
+</tutoriales_ordenados>
 _______________________________________________________________________________________________________________________________
 11. todos los datos de cada tutorial excepto las visitas.
 
 
+<tutoriales_sin_visitas>
+{
+  for $tutorial in doc("tutoriales.xml")//tutorial
+  return
+    <tutorial>
+      { $tutorial/*[not(self::visitas)] }
+    </tutorial>
+}
+</tutoriales_sin_visitas>
 _______________________________________________________________________________________________________________________________
 12. En una tabla de HTML de dos columnas, el título de los tutoriales y los nombres de los autores.
 
+
+<html>
+  <head>
+    <title>Tutoriales y Autores</title>
+  </head>
+  <body>
+    <table border="1">
+      <tr>
+        <th>Título del Tutorial</th>
+        <th>Nombre del Autor</th>
+      </tr>
+      {
+        for $tutorial in doc("tutoriales.xml")//tutorial
+        return
+          <tr>
+            <td>{data($tutorial/titulo)}</td>
+            <td>{data($tutorial/autor/nombre)} {data($tutorial/autor/apellidos)}</td>
+          </tr>
+      }
+    </table>
+  </body>
+</html>
 
 
