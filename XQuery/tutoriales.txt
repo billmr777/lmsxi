@@ -49,7 +49,21 @@ ________________________________________________________________________________
 _______________________________________________________________________________________________________________________________
 7. nombres y apellidos de los autores eliminando los repetidos y acompañar cada nombre con todos sus tutoriales, ordenados alfabeticametne por nombre de autor; cada autor en una etiqueta <autor> que contendrá una etiqueta <nombreyapellidos> y una etiqueta <titulo>.
 
+let $autores :=
+  for $autor in distinct-values(//autor/nombre)
+  order by $autor
+  return
+    <autor>
+      <nombreyapellidos>{$autor} {data(//autor[nombre = $autor]/apellidos)}</nombreyapellidos>
+      {
+        for $tutorial in //tutorial[autor/nombre = $autor]
+        return
+          <titulo>{data($tutorial/titulo)}</titulo>
+      }
+    </autor>
 
+return
+  <result>{ $autores }</result>
 _______________________________________________________________________________________________________________________________
 8. la media de vistas de los tutoriales, dentro de una etiqueta <media>.
 
